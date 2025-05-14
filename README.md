@@ -6,8 +6,8 @@ Este projeto implementa, do zero, um **Garbage Collector (GC) Mark and Sweep**, 
 
 ## 🚀 O que o projeto faz
 
-- 📦 Aloca dinamicamente objetos como inteiros, strings, arrays e valores genéricos
-- 🔁 Gerencia escopos e ciclos de vida com **frames aninhados**
+- 📦 Aloca dinamicamente objetos como inteiros, strings, arrays e floats
+- 🔁 Gerencia escopos e ciclos de vida com frames
 - 🧹 Executa a coleta de lixo com algoritmo Mark and Sweep completo
 - 🔗 Lida com **ciclos de referência** e grafos de objetos interdependentes
 - ✅ Inclui uma suíte de testes automatizados utilizado **MUnit** para abrangir diversos cenários de uso
@@ -27,13 +27,14 @@ A maior parte das linguagens modernas esconde o gerenciamento de memória do des
 
 ## 📂 Estrutura do Projeto
 
-| Arquivo     | Descrição                                                              |
-|-------------|------------------------------------------------------------------------|
-| object.c/.h | Define os tipos de objetos (int, float, string, array)                 |
-| vm.c/.h     | Implementação da máquina virtual e do coletor mark and sweep           |
-| stack.c/.h  | Implementação da estrutura de stack para uso no projeto                |
-| tests.c     | Casos de teste automatizados para validar o comportamento do coletor   |
-| README.md   | Documentação do projeto                                                |   
+| Arquivo        | Descrição                                                              |
+|----------------|------------------------------------------------------------------------|
+| object.c/.h    | Define os tipos de objetos (int, float, string, array)                 |
+| vm.c/.h        | Implementação da máquina virtual e do coletor mark and sweep           |
+| stack.c/.h     | Implementação da estrutura de stack para uso no projeto                |
+| tests.c        | Casos de teste automatizados para validar o comportamento do coletor   |
+| CmakeLists.txt | Configurações de build                                                 |
+| README.md      | Documentação do projeto                                                |   
 
 ---
 
@@ -70,5 +71,6 @@ Os testes cobrem:
 - Arrays de objetos
 - Referência cíclica (objeto → objeto → volta ao primeiro)
 - Cenários com múltiplos frames e escopos aninhados
+> Este projeto utiliza o [µnit](https://github.com/nemequ/munit) (MUnit), um framework minimalista para testes em C. Você pode instala-lo utilizando [vcpkg](https://github.com/microsoft/vcpkg) ou git clone a partir do repositório deste projeto e depois inclui-lo no CMakeList.txt dentro de include_directories
 
 ---
