@@ -1,4 +1,4 @@
-# 🧠 Garbage Collector Mark and Sweep em C
+# 🧹 Garbage Collector Mark and Sweep em C
 
 Este projeto implementa, do zero, um **Garbage Collector (GC) Mark and Sweep**, inspirado nos mecanismos de gerenciamento automático de memória presentes em linguagens como Java, Python e Go. A proposta é **explorar os bastidores dessas linguagens**, entendendo como objetos são alocados, rastreados e eventualmente descartados da memória.
 
@@ -25,20 +25,21 @@ A maior parte das linguagens modernas esconde o gerenciamento de memória do des
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🧠 Como Funciona o Mark and Sweep
+O coletor de lixo Mark and Sweep opera em duas fases principais:
 
-| Arquivo        | Descrição                                                              |
-|----------------|------------------------------------------------------------------------|
-| object.c/.h    | Define os tipos de objetos (int, float, string, array)                 |
-| vm.c/.h        | Implementação da máquina virtual e do coletor mark and sweep           |
-| stack.c/.h     | Implementação da estrutura de stack para uso no projeto                |
-| tests.c        | Casos de teste automatizados para validar o comportamento do coletor   |
-| CmakeLists.txt | Configurações de build                                                 |
-| README.md      | Documentação do projeto                                                |   
+### 🔹 1. Mark (Marcar)
+O processo começa pelos frames e percorre todos os objetos referênciados por eles, marcando-os. Esse rastreamento segue referências de forma recursiva, o que significa que estruturas compostas, como arrays, também são exploradas:
+- Um array marcado leva ao rastreamento de todos os objetos internos.
+- No caso de referênciação cíclica, os objetos não serão marcados pois não são acessíveis a partir do frame
+- O processo é similar a uma busca em profundidade (DFS) sobre o grafo de objetos.
 
----
+### 🔹 2. Sweep (Varrer)
+Na fase seguinte, o coletor varre todos os objetos alocados:
+- Se estiverem marcados, são "desmarcados" e preservados.
+- Se não estiverem marcados, são considerados lixo e liberados da memória.
 
-## 🕹️ Exemplo de uso
+### 🕹️ Exemplo de uso
 
 ```c
 vm_t *vm = vm_new();
@@ -71,6 +72,52 @@ Os testes cobrem:
 - Arrays de objetos
 - Referência cíclica (objeto → objeto → volta ao primeiro)
 - Cenários com múltiplos frames e escopos aninhados
-> Este projeto utiliza o [µnit](https://github.com/nemequ/munit) (MUnit), um framework minimalista para testes em C. Você pode instala-lo utilizando [vcpkg](https://github.com/microsoft/vcpkg) ou git clone a partir do repositório deste projeto e depois inclui-lo no CMakeList.txt dentro de include_directories
 
 ---
+
+## 📂 Estrutura do Projeto
+
+| Arquivo        | Descrição                                                              |
+|----------------|------------------------------------------------------------------------|
+| object.c/.h    | Define os tipos de objetos (int, float, string, array)                 |
+| vm.c/.h        | Implementação da máquina virtual e do coletor mark and sweep           |
+| stack.c/.h     | Implementação da estrutura de stack para uso no projeto                |
+| tests.c        | Casos de teste automatizados para validar o comportamento do coletor   |
+| CmakeLists.txt | Configurações de build                                                 |
+| README.md      | Documentação do projeto                                                |   
+
+---
+
+## ⚙️ Como rodar
+
+Este projeto usa **CMake** e inclui o **Munit** (framework de testes) como submódulo para validação do comportamento do coletor.
+
+### 📥 Clonando o repositório
+
+Clone com submódulos:
+
+```bash
+git clone --recursive https://github.com/edu292/mark_and_sweep.git
+cd mas_gc
+```
+
+Já clonou sem `--recursive`?
+
+```bash
+git submodule update --init
+```
+
+### 🛠️ Compilando com CMake
+
+```bash
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+### 🧪 Executando os testes
+
+```bash
+./mas_gc
+```
